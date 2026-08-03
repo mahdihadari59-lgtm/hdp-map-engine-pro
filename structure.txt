@@ -1,0 +1,54 @@
+HDP Map Engine Pro - Project Structure
+========================================
+
+ROOT
+├── package.json          (workspaces: backend, frontend)
+├── README.md
+├── shared/
+│   └── constants.js      (shared enums, API endpoints, layer IDs)
+├── data/
+│   └── README.md
+│   └── seed.json         (sample seed data)
+├── backend/
+│   ├── package.json
+│   ├── .env.example
+│   ├── src/
+│   │   ├── app.js
+│   │   ├── server.js
+│   │   ├── config/
+│   │   ├── database/
+│   │   ├── middlewares/
+│   │   ├── routes/
+│   │   ├── connectors/
+│   │   ├── utils/
+│   │   ├── data/
+│   │   ├── layers/
+│   │   └── modules/
+│   │       ├── navigation/
+│   │       ├── heatmap/
+│   │       ├── tile/
+│   │       ├── voice/
+│   │       ├── camera/
+│   │       ├── routing/
+│   │       ├── offline/
+│   │       ├── cluster/
+│   │       ├── traffic/     (full MVC: routes/services/controllers/repositories)
+│   │       └── prediction/
+│   └── ...
+└── frontend/
+    ├── package.json
+    ├── vite.config.js
+    ├── index.html
+    ├── src/
+    │   ├── main.jsx
+    │   ├── App.jsx
+    │   ├── store.js
+    │   ├── api/client.js
+    │   ├── config/
+    │   ├── hooks/
+    │   ├── services/
+    │   ├── pages/
+    │   ├── styles/
+    │   ├── components/
+    │   └── layers/            (18 layer components)
+    └── ...

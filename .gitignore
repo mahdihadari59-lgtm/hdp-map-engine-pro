@@ -1,0 +1,11 @@
+node_modules/
+dist/
+build/
+*.log
+.env
+.env.local
+*.bak_*
+backend/database.json.bak_*
+data/seed.json.bak_*
+data/bandar_abbas_pois.json.bak_*
+backend/data.js.bak_*
