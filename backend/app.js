@@ -1,27 +1,51 @@
 const express = require('express');
-const cors = require('cors');
-const path = require('path');
-
 const app = express();
-app.use(cors());
+const path = require('path');
+const fs = require('fs');
+
+// Middleware
 app.use(express.json());
 
-app.use('/api/v1/places', require('./routes/places'));
-app.use('/api/v1/nearby', require('./routes/nearby'));
-app.use('/api/v1/stats', require('./routes/stats'));
+// Load data
+let places = [];
+try {
+  const dataPath = path.join(__dirname, '..', 'data', 'bandar_abbas_pois.json');
+  console.log('Loading data from:', dataPath);
+  
+  const rawData = fs.readFileSync(dataPath, 'utf8');
+  const parsedData = JSON.parse(rawData);
+  // داده توی results هست
+  places = parsedData.results || [];
+  console.log(`✅ Loaded ${places.length} places`);
+} catch (error) {
+  console.error('❌ Error loading data:', error.message);
+  places = [
+    { id: "1", name: "Test Place 1", lat: 27.18, lon: 56.27 },
+    { id: "2", name: "Test Place 2", lat: 27.19, lon: 56.28 }
+  ];
+}
 
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', region: 'bandar_abbas', app: 'hdp-bnd' });
+// Routes
+app.get('/api/places', (req, res) => {
+  res.json(places);
 });
 
-app.use(express.static(path.join(__dirname, '../frontend/dist')));
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../frontend/dist/index.html'));
+app.get('/api/places/:id', (req, res) => {
+  const place = places.find(p => p.id === req.params.id);
+  if (place) {
+    res.json(place);
+  } else {
+    res.status(404).json({ error: 'Place not found' });
+  }
 });
 
-app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ success: false, error: 'یه مشکلی پیش اومد، دوباره تلاش کن!' });
+// Health check
+app.get('/api/health', (req, res) => {
+  res.json({ 
+    status: 'ok', 
+    timestamp: new Date().toISOString(), 
+    count: places.length 
+  });
 });
 
 module.exports = app;
