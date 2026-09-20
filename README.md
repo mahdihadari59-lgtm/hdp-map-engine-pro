@@ -17,3 +17,6 @@ frontend/ — React 18 + Vite + Leaflet (src/pages/MapPage.jsx)
 data/bandar_abbas_pois.json — ۹٬۷۱۴ POI واقعی هرمزگان (education, markets, offices, healthcare, transport)
 📊 دسته‌بندی‌ها
 ۱۵۰ دستهٔ مختلف مکان، با نگاشت فارسی کامل در backend/data.js.
+
+## 🧪 Tests
+[![Test & Build](https://github.com/mahdihadari59-lgtm/hdp-map-engine-pro/actions/workflows/test.yml/badge.svg)](https://github.com/mahdihadari59-lgtm/hdp-map-engine-pro/actions/workflows/test.yml)
