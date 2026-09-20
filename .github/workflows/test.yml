@@ -2,84 +2,89 @@ name: Test & Build
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test-backend:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Install backend dependencies
-      run: |
-        cd backend
-        npm ci
-    
-    - name: Run backend tests
-      run: |
-        cd backend
-        npm test || echo "No tests yet"
-  
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Run backend tests
+        working-directory: backend
+        run: npm test
+
   test-frontend:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Install frontend dependencies
-      run: |
-        cd frontend
-        npm ci
-    
-    - name: Build frontend
-      run: |
-        cd frontend
-        npm run build
-    
-    - name: Run frontend tests
-      run: |
-        cd frontend
-        npm test || echo "No tests yet"
-  
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: frontend
+        run: npm run build
+
+      - name: Run frontend tests
+        working-directory: frontend
+        run: npm test || echo "No tests yet"
+
   lint:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Run linting
-      run: |
-        npm run lint || echo "No linter configured"
-  
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Check lint configuration
+        run: |
+          echo "Backend scripts:"
+          npm --prefix backend run
+
+          echo "Frontend scripts:"
+          npm --prefix frontend run
+
+          echo "No lint script is currently configured."
+
   security:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Run security audit
-      run: |
-        npm audit --production || echo "Audit issues found"
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Backend security audit
+        working-directory: backend
+        run: npm audit --production || echo "Backend audit issues found"
+
+      - name: Frontend security audit
+        working-directory: frontend
+        run: npm audit --production || echo "Frontend audit issues found"
